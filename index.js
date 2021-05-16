@@ -1,11 +1,10 @@
 const { Telegraf } = require("telegraf");
 const axios = require("axios");
 
-const TELEGRAM_BOT_TOKEN =
-  process.env.TELEGRAM_BOT_TOKEN ||
-  "1690572286:AAG60I8zQQcmaQNkE_K1WtMajIDH3Il3zxQ";
+require("dotenv").config();
 
-const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
+const { BOT_TOKEN } = process.env;
+const bot = new Telegraf(BOT_TOKEN);
 
 bot.start((ctx) => {
   return ctx.reply("Welcome to CryptoRating Bot!");
@@ -24,16 +23,20 @@ bot.command("rates", async (ctx) => {
         },
       }
     );
-    return ctx.reply(
-      `${res.data.data
-        .map(
-          (it) =>
-            `${it.symbol} | 🇺🇸 ${it.quote["USD"].price.toFixed(2)} | ${it.quote[
-              "USD"
-            ]["percent_change_24h"].toFixed(2)}%`
-        )
-        .join("\n")}`
-    );
+
+    let data = res.data.data;
+    let result = data
+      .map((it) => {
+        let symb = it.symbol;
+        let usdPrice = it.quote["USD"].price.toFixed(2);
+        let diffPercent = it.quote["USD"]["percent_change_24h"].toFixed(2);
+        let diagram = diffPercent > 0 ? "📈" : "📉";
+
+        return `${symb} | 🇺🇸 ${usdPrice} | ${diagram} ${diffPercent}%`;
+      })
+      .join("\n");
+
+    return ctx.reply(`${result}`);
   } catch (err) {
     console.log(err);
   }
