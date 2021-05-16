@@ -32,7 +32,9 @@ bot.command("rates", async (ctx) => {
         let diffPercent = it.quote["USD"]["percent_change_24h"].toFixed(2);
         let diagram = diffPercent > 0 ? "📈" : "📉";
 
-        return `${symb} | 🇺🇸 ${usdPrice} | ${diagram} ${diffPercent}%`;
+        return `${symb} | 🇺🇸 ${usdPrice} | 🇷🇺 ${(usdPrice * 74).toFixed(
+          2
+        )} | ${diagram} ${diffPercent}%`;
       })
       .join("\n");
 
