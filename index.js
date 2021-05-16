@@ -7,6 +7,6 @@ const TELEGRAM_BOT_TOKEN =
 const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
 bot.start((ctx) => {
-  return ctx.reply("Welcome to CryptoRating Bot! ");
+  return ctx.reply("Welcome to CryptoRating Bot!");
 });
 bot.startPolling();
